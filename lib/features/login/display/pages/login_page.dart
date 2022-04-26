@@ -1,3 +1,4 @@
+import 'package:elemination_round_app/features/authentication/display/cubit/authentication_cubit.dart';
 import 'package:elemination_round_app/features/login/display/cubit/login_cubit/login_cubit.dart';
 import 'package:elemination_round_app/gen/assets.gen.dart';
 import 'package:flutter/material.dart';
@@ -41,7 +42,7 @@ class LoginPage extends StatelessWidget {
               ),
             ));
         } else if (state is SuccessLogin) {
-          //context.read<AuthenticationBloc>().add(AuthenticationUserChanged());
+          context.read<AuthenticationCubit>().authetnicationUserChanged();
           ScaffoldMessenger.of(context)
             ..hideCurrentSnackBar()
             ..showSnackBar(const SnackBar(

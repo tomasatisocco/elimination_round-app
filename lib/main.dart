@@ -1,3 +1,4 @@
+import 'package:elemination_round_app/features/authentication/display/cubit/authentication_cubit.dart';
 import 'package:elemination_round_app/features/login/display/cubit/login_cubit/login_cubit.dart';
 import 'package:equatable/equatable.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -19,12 +20,10 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MultiBlocProvider(
-      providers: [
-        BlocProvider<LoginCubit>(create: (_) => LoginCubit()),
-      ],
-      child: const AppView()
-    );
+    return MultiBlocProvider(providers: [
+      BlocProvider<LoginCubit>(create: (_) => LoginCubit()),
+      BlocProvider<AuthenticationCubit>(create: (_) => AuthenticationCubit()),
+    ], child: const AppView());
   }
 }
 
@@ -36,17 +35,55 @@ class AppView extends StatefulWidget {
 }
 
 class _AppViewState extends State<AppView> {
+  final GlobalKey<NavigatorState> _navigatorKey = GlobalKey<NavigatorState>();
+
+  NavigatorState? get _navigator => _navigatorKey.currentState;
 
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-          title: 'Flutter Demo',
-          theme: ThemeData(
-            primarySwatch: Colors.blue,
-          ),
-          home: LoginPage(),
-    );
+      navigatorKey: _navigatorKey,
+      title: 'Flutter Demo',
+      theme: ThemeData(
+        primarySwatch: Colors.blue,
+      ),
+      builder: (context, child) {
+          return BlocListener<AuthenticationCubit, AuthenticationState>(
+        listener: (context, state) {
+          if (state is AuthenticatedUser) {
+            _navigator!.pushAndRemoveUntil<void>(
+                MaterialPageRoute(
+                  settings: const RouteSettings(name: "/Home"),
+                  builder: (_) => const HomePage(),
+                ),
+                (route) => false);
+          } else if (state is UnauthenticatedUser ||
+              state is UnknownUser) {
+            _navigator!.pushAndRemoveUntil<void>(
+                MaterialPageRoute(builder: (_) => LoginPage()),
+                (route) => false);
+          } else {
+            _navigator!.pushAndRemoveUntil<void>(
+                MaterialPageRoute(builder: (_) => LoginPage()),
+                (route) => false);
+          }
+        },
+        child: child,
+      );},
+      onGenerateRoute: (_) => 
+        MaterialPageRoute(builder: (_) => const SplashPage()),
+      );
+  }
+}
+
+class SplashPage extends StatelessWidget {
+  const SplashPage({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    context.read<AuthenticationCubit>().authetnicationUserChanged();
+    return Container(child: Text('Splash page'),);
   }
 }
 
@@ -57,7 +94,12 @@ class HomePage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(),
-      body: Container(),
+      body: Container(
+        child: ElevatedButton(
+          child: Text('Logout'),
+          onPressed:() => context.read<AuthenticationCubit>().logOut(),
+        ),
+      ),
     );
   }
 }
