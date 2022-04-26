@@ -12,3 +12,17 @@ class  LoginFailure extends Failure {
   @override
   List<Object?> get props => [errorMessege];
 }
+
+class UserNotLoggedIn extends Failure {
+  const UserNotLoggedIn({required String? errorMessege}) : super(errorMessege: errorMessege);
+
+  @override
+  List<Object?> get props => [errorMessege];
+}
+
+class LogoutFailure extends Failure {
+  const LogoutFailure({required String? errorMessege}) : super(errorMessege: errorMessege);
+  
+  @override
+  List<Object?> get props => [errorMessege];
+}
