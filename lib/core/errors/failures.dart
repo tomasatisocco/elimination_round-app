@@ -26,3 +26,10 @@ class LogoutFailure extends Failure {
   @override
   List<Object?> get props => [errorMessege];
 }
+
+class LocalPersistenceFailure extends Failure {
+  const LocalPersistenceFailure({required String? errorMessege}) : super(errorMessege: errorMessege);
+  
+  @override
+  List<Object?> get props => [errorMessege];
+}

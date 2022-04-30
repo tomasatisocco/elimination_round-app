@@ -5,12 +5,16 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:hive_flutter/hive_flutter.dart';
 
 import 'features/login/display/pages/login_page.dart';
+import 'features/show_my_rounds/data/models/round_model.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
+  await Hive.initFlutter();
+  Hive.registerAdapter(RoundModelAdapter());
   EquatableConfig.stringify = kDebugMode;
   runApp(const MyApp());
 }
