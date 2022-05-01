@@ -12,11 +12,11 @@ class MyShotsLocalDataSourceImp implements MyShotsLocalDataSource {
 
   @override
   Future<List<RoundModel>?> getModelsInLocalDatasource() async {
-    List<RoundModel>? _roundModels = [];
+    List<RoundModel>? _roundModels;
     try {
-      await Hive.openBox<RoundModel>(boxName);
-      _roundModels = Hive.box(boxName).values.toList().cast<RoundModel>();
-      Hive.box(boxName).close();
+      Box<RoundModel> box = await Hive.openBox<RoundModel>(boxName);
+      _roundModels = box.values.toList().cast<RoundModel>();
+      box.close();
       return _roundModels;
     } catch (_) {
       throw ReadLocalPersistanceException();

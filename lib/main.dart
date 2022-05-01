@@ -10,6 +10,8 @@ import 'features/authentication/display/cubit/authentication_cubit.dart';
 import 'features/login/display/cubit/login_cubit/login_cubit.dart';
 import 'features/login/display/pages/login_page.dart';
 import 'features/show_my_rounds/data/models/round_model.dart';
+import 'features/show_my_rounds/display/cubit/show_my_rounds_cubit.dart';
+import 'features/show_my_rounds/display/pages/show_my_rounds_page.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -28,6 +30,7 @@ class MyApp extends StatelessWidget {
     return MultiBlocProvider(providers: [
       BlocProvider<LoginCubit>(create: (_) => LoginCubit()),
       BlocProvider<AuthenticationCubit>(create: (_) => AuthenticationCubit()),
+      BlocProvider<ShowMyRoundsCubit>(create: (_) => ShowMyRoundsCubit()),
     ], child: const AppView());
   }
 }
@@ -57,10 +60,11 @@ class _AppViewState extends State<AppView> {
         return BlocListener<AuthenticationCubit, AuthenticationState>(
           listener: (context, state) {
             if (state is AuthenticatedUser) {
+              context.read<ShowMyRoundsCubit>().loadMyRounds();
               _navigator!.pushAndRemoveUntil<void>(
                   MaterialPageRoute(
                     settings: const RouteSettings(name: "/Home"),
-                    builder: (_) => const HomePage(),
+                    builder: (_) => const ShowMyRoundsPage(),
                   ),
                   (route) => false);
             } else if (state is UnauthenticatedUser || state is UnknownUser) {
@@ -89,26 +93,8 @@ class SplashPage extends StatelessWidget {
   Widget build(BuildContext context) {
     context.read<AuthenticationCubit>().authenticationUserChanged();
     return Container(
-      child: const Text('Splash page'),
+      child: const Center(child: Text('Splash page')),
       color: Colors.white,
-    );
-  }
-}
-
-class HomePage extends StatelessWidget {
-  const HomePage({Key? key}) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(),
-      body: Container(
-        color: Colors.amber,
-        child: ElevatedButton(
-          child: const Text('Logout'),
-          onPressed: () => context.read<AuthenticationCubit>().logOut(),
-        ),
-      ),
     );
   }
 }
