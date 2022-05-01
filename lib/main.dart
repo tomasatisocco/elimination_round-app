@@ -1,12 +1,13 @@
-import 'package:elemination_round_app/features/authentication/display/cubit/authentication_cubit.dart';
-import 'package:elemination_round_app/features/login/display/cubit/login_cubit/login_cubit.dart';
-import 'package:equatable/equatable.dart';
-import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+
+import 'package:equatable/equatable.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 
+import 'features/authentication/display/cubit/authentication_cubit.dart';
+import 'features/login/display/cubit/login_cubit/login_cubit.dart';
 import 'features/login/display/pages/login_page.dart';
 import 'features/show_my_rounds/data/models/round_model.dart';
 
@@ -53,31 +54,31 @@ class _AppViewState extends State<AppView> {
         primarySwatch: Colors.blue,
       ),
       builder: (context, child) {
-          return BlocListener<AuthenticationCubit, AuthenticationState>(
-        listener: (context, state) {
-          if (state is AuthenticatedUser) {
-            _navigator!.pushAndRemoveUntil<void>(
-                MaterialPageRoute(
-                  settings: const RouteSettings(name: "/Home"),
-                  builder: (_) => const HomePage(),
-                ),
-                (route) => false);
-          } else if (state is UnauthenticatedUser ||
-              state is UnknownUser) {
-            _navigator!.pushAndRemoveUntil<void>(
-                MaterialPageRoute(builder: (_) => LoginPage()),
-                (route) => false);
-          } else {
-            _navigator!.pushAndRemoveUntil<void>(
-                MaterialPageRoute(builder: (_) => LoginPage()),
-                (route) => false);
-          }
-        },
-        child: child,
-      );},
-      onGenerateRoute: (_) => 
-        MaterialPageRoute(builder: (_) => const SplashPage()),
-      );
+        return BlocListener<AuthenticationCubit, AuthenticationState>(
+          listener: (context, state) {
+            if (state is AuthenticatedUser) {
+              _navigator!.pushAndRemoveUntil<void>(
+                  MaterialPageRoute(
+                    settings: const RouteSettings(name: "/Home"),
+                    builder: (_) => const HomePage(),
+                  ),
+                  (route) => false);
+            } else if (state is UnauthenticatedUser || state is UnknownUser) {
+              _navigator!.pushAndRemoveUntil<void>(
+                  MaterialPageRoute(builder: (_) => LoginPage()),
+                  (route) => false);
+            } else {
+              _navigator!.pushAndRemoveUntil<void>(
+                  MaterialPageRoute(builder: (_) => LoginPage()),
+                  (route) => false);
+            }
+          },
+          child: child,
+        );
+      },
+      onGenerateRoute: (_) =>
+          MaterialPageRoute(builder: (_) => const SplashPage()),
+    );
   }
 }
 
@@ -86,8 +87,11 @@ class SplashPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    context.read<AuthenticationCubit>().authetnicationUserChanged();
-    return Container(child: Text('Splash page'),);
+    context.read<AuthenticationCubit>().authenticationUserChanged();
+    return Container(
+      child: const Text('Splash page'),
+      color: Colors.white,
+    );
   }
 }
 
@@ -99,9 +103,10 @@ class HomePage extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(),
       body: Container(
+        color: Colors.amber,
         child: ElevatedButton(
-          child: Text('Logout'),
-          onPressed:() => context.read<AuthenticationCubit>().logOut(),
+          child: const Text('Logout'),
+          onPressed: () => context.read<AuthenticationCubit>().logOut(),
         ),
       ),
     );

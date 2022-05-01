@@ -1,6 +1,7 @@
-import 'package:elemination_round_app/core/errors/exceptions/local_persistance_exceptions.dart';
-import 'package:elemination_round_app/features/show_my_rounds/data/models/round_model.dart';
 import 'package:hive/hive.dart';
+
+import '../../../../core/errors/exceptions/local_persistance_exceptions.dart';
+import '../models/round_model.dart';
 
 abstract class MyShotsLocalDataSource {
   Future<List<RoundModel>?> getModelsInLocalDatasource();
@@ -21,5 +22,4 @@ class MyShotsLocalDataSourceImp implements MyShotsLocalDataSource {
       throw ReadLocalPersistanceException();
     }
   }
-
 }

@@ -1,9 +1,10 @@
-import 'package:elemination_round_app/features/authentication/display/cubit/authentication_cubit.dart';
-import 'package:elemination_round_app/features/login/display/cubit/login_cubit/login_cubit.dart';
-import 'package:elemination_round_app/gen/assets.gen.dart';
 import 'package:flutter/material.dart';
+
 import 'package:flutter_bloc/flutter_bloc.dart';
 
+import '../../../../gen/assets.gen.dart';
+import '../../../authentication/display/cubit/authentication_cubit.dart';
+import '../cubit/login_cubit/login_cubit.dart';
 import '../widgets/login_button_widget.dart';
 
 class LoginPage extends StatelessWidget {
@@ -23,10 +24,7 @@ class LoginPage extends StatelessWidget {
               backgroundColor: Colors.red,
               content: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: <Widget>[
-                  Text(state.error),
-                  const Icon(Icons.error)
-                ],
+                children: <Widget>[Text(state.error), const Icon(Icons.error)],
               ),
             ));
         } else if (state is LoadingLogin) {
@@ -42,11 +40,12 @@ class LoginPage extends StatelessWidget {
               ),
             ));
         } else if (state is SuccessLogin) {
-          context.read<AuthenticationCubit>().authetnicationUserChanged();
+          context.read<AuthenticationCubit>().authenticationUserChanged();
           ScaffoldMessenger.of(context)
             ..hideCurrentSnackBar()
-            ..showSnackBar(const SnackBar(
-              content: Text('Bienvenido'),
+            ..showSnackBar(
+              const SnackBar(
+                content: Text('Bienvenido'),
               ),
             );
         }
@@ -79,10 +78,8 @@ class LoginPage extends StatelessWidget {
                     const Text(
                       'Login',
                       textAlign: TextAlign.center,
-                      style: TextStyle(
-                        fontWeight: FontWeight.bold,
-                        fontSize: 40
-                      ),
+                      style:
+                          TextStyle(fontWeight: FontWeight.bold, fontSize: 40),
                     ),
                     const Text(
                       'Ludus elimination App',
@@ -143,11 +140,9 @@ class LoginPage extends StatelessWidget {
                               ),
                               Container(
                                 padding: const EdgeInsets.only(top: 30),
-                                width:
-                                    MediaQuery.of(context).size.width * 0.8,
+                                width: MediaQuery.of(context).size.width * 0.8,
                                 child: Column(
-                                  crossAxisAlignment:
-                                      CrossAxisAlignment.start,
+                                  crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
                                     const Padding(
                                       padding: EdgeInsets.only(bottom: 8.0),
@@ -184,7 +179,7 @@ class LoginPage extends StatelessWidget {
                                               .read<LoginCubit>()
                                               .state
                                               .isPasswordValid
-                                          ? 'Constraseña Invalida'
+                                          ? 'Contraseña Invalida'
                                           : null,
                                       onChanged: (password) {
                                         context
@@ -208,15 +203,15 @@ class LoginPage extends StatelessWidget {
                           padding: const EdgeInsets.only(
                               top: 60, bottom: 40, left: 40, right: 40),
                           child: LoginButtonWidget(
-                            onPressed:
-                                context.read<LoginCubit>().isFormValid()
-                                    ? (() async {await context
+                            onPressed: context.read<LoginCubit>().isFormValid()
+                                ? (() async {
+                                    await context
                                         .read<LoginCubit>()
                                         .loginWithCredentialsPressed(
-                                          email: _emailController.text,
-                                          password: _passwordController.text);
-                                    })
-                                    : null,
+                                            email: _emailController.text,
+                                            password: _passwordController.text);
+                                  })
+                                : null,
                           ),
                         );
                       },

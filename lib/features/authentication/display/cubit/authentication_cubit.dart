@@ -1,17 +1,19 @@
 import 'package:bloc/bloc.dart';
-import 'package:elemination_round_app/features/authentication/data/datasources/authentication_firebase_datasource.dart';
-import 'package:elemination_round_app/features/authentication/data/models/authentication_user_model.dart';
-import 'package:elemination_round_app/features/authentication/data/repositories/authentication_repository_implementation.dart';
 import 'package:equatable/equatable.dart';
+
+import '../../data/datasources/authentication_firebase_datasource.dart';
+import '../../data/models/authentication_user_model.dart';
+import '../../data/repositories/authentication_repository_implementation.dart';
 
 part 'authentication_state.dart';
 
 class AuthenticationCubit extends Cubit<AuthenticationState> {
   AuthenticationCubit() : super(const AuthenticationInitial());
 
-  final AuthenticationRepositoryImpl repository = AuthenticationRepositoryImpl(dataSource: AuthenticationFirebaseDataSourceImpl());
+  final AuthenticationRepositoryImpl repository = AuthenticationRepositoryImpl(
+      dataSource: AuthenticationFirebaseDataSourceImpl());
 
-  void authetnicationUserChanged(){
+  void authenticationUserChanged() {
     emit(const AuthenticationLoading());
     final failureOrUserModel = repository.isLoggedIn();
     failureOrUserModel.fold(
@@ -24,7 +26,7 @@ class AuthenticationCubit extends Cubit<AuthenticationState> {
     final failureOrLogout = await repository.logOut();
     failureOrLogout.fold(
       (failure) => null,
-      (succes) => emit(const UnauthenticatedUser()),
+      (success) => emit(const UnauthenticatedUser()),
     );
   }
 }

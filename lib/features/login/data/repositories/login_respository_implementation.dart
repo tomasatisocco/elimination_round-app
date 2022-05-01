@@ -1,9 +1,9 @@
-import 'package:elemination_round_app/core/errors/failures.dart';
 import 'package:dartz/dartz.dart';
-import 'package:elemination_round_app/features/login/data/datasources/login_firebase_datasource.dart';
-import 'package:elemination_round_app/features/login/domain/repositories/login_repositoy.dart';
+
 import '../../../../core/errors/exceptions/login_exceptions.dart';
 import '../../../../core/errors/failures.dart';
+import '../../domain/repositories/login_repository.dart';
+import '../datasources/login_firebase_datasource.dart';
 
 class LoginRepositoryImpl implements LoginRepository {
   LoginRepositoryImpl({required this.dataSource});
@@ -14,30 +14,31 @@ class LoginRepositoryImpl implements LoginRepository {
   Future<Either<Failure, void>> loginWithEmailAndPassword(
       {required String email, required String password}) async {
     try {
-      await dataSource.loginWithEmailAndPassword(email: email, password: password);
+      await dataSource.loginWithEmailAndPassword(
+          email: email, password: password);
       return const Right(null);
     } catch (e) {
       switch (e.runtimeType) {
         case InvalidEmailException:
-          return const Left(LoginFailure(errorMessege: 'Email invalido'));
+          return const Left(LoginFailure(errorMessage: 'Email invalido'));
         case PasswordExceptions:
           return const Left(
-              LoginFailure(errorMessege: 'Contraseña incorrecta'));
+              LoginFailure(errorMessage: 'Contraseña incorrecta'));
         case UserNotFoundException:
           return const Left(
-              LoginFailure(errorMessege: 'No se encontro al usuario'));
+              LoginFailure(errorMessage: 'No se encontró al usuario'));
         case UserDisabledException:
           return const Left(
-              LoginFailure(errorMessege: 'Usisario deshabilitado'));
+              LoginFailure(errorMessage: 'Usurario deshabilitado'));
         case TooManyRequestException:
           return const Left(LoginFailure(
-              errorMessege: 'Demasiados intentos seguidos, intenta mas tarde'));
-        case UncknownLoginException:
+              errorMessage: 'Demasiados intentos seguidos, intenta mas tarde'));
+        case UnknownLoginException:
           return const Left(
-              LoginFailure(errorMessege: 'Error de autenticacion desconocido'));
+              LoginFailure(errorMessage: 'Error de autenticación desconocido'));
         default:
           return const Left(
-              LoginFailure(errorMessege: 'Error de autenticacion desconocido'));
+              LoginFailure(errorMessage: 'Error de autenticación desconocido'));
       }
     }
   }

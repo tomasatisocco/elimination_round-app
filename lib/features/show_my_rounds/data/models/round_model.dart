@@ -1,5 +1,8 @@
+// ignore_for_file: annotate_overrides, overridden_fields
+
 import 'package:hive/hive.dart';
-import 'package:elemination_round_app/features/show_my_rounds/domain/entities/round.dart';
+
+import '../../domain/entities/round.dart';
 
 part 'round_model.g.dart';
 
@@ -42,7 +45,7 @@ class RoundModel extends Round {
   @HiveField(7)
   final String? comment;
 
-  factory RoundModel.formJson(Map<String,dynamic> json){
+  factory RoundModel.formJson(Map<String, dynamic> json) {
     return RoundModel(
       level: json["level"],
       date: json["date"],
@@ -55,7 +58,7 @@ class RoundModel extends Round {
     );
   }
 
-  Map<String,dynamic> toJson(){
+  Map<String, dynamic> toJson() {
     return {
       "level": level,
       "date": date,
@@ -68,7 +71,7 @@ class RoundModel extends Round {
     };
   }
 
-  RoundModel copyWith(RoundModel newModel){
+  RoundModel copyWith(RoundModel newModel) {
     return RoundModel(
       level: newModel.level ?? level,
       date: newModel.date ?? date,
@@ -98,13 +101,13 @@ class RoundModel extends Round {
 
   @override
   List<Object?> get props => [
-    level,
-    date,
-    userID,
-    setResults,
-    myShots,
-    totalResult,
-    shootOff,
-    comment,
-  ];
+        level,
+        date,
+        userID,
+        setResults,
+        myShots,
+        totalResult,
+        shootOff,
+        comment,
+      ];
 }

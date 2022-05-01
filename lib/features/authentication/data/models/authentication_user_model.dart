@@ -1,5 +1,6 @@
-import 'package:elemination_round_app/features/authentication/domain/entities/authentication_user.dart';
+import '../../domain/entities/authentication_user.dart';
 
 class AuthenticationUserModel extends AuthenticationUser {
-  AuthenticationUserModel({String? userEmail, String? userID}) : super(userEmail: userEmail, userID: userID);
+  AuthenticationUserModel({String? userEmail, String? userID})
+      : super(userEmail: userEmail, userID: userID);
 }

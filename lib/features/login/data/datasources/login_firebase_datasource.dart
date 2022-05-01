@@ -36,7 +36,7 @@ class LoginFirebaseDataSourceImpl implements LoginFirebaseDataSource {
         case "too-many-requests":
           throw TooManyRequestException();
         default:
-          throw UncknownLoginException();
+          throw UnknownLoginException();
       }
     }
   }
