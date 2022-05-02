@@ -15,10 +15,18 @@ class $AssetsImagesGen {
       const AssetGenImage('assets/images/login_background.jpg');
 }
 
+class $AssetsRandomValuesGen {
+  const $AssetsRandomValuesGen();
+
+  /// File path: assets/random_values/random_values.json
+  String get randomValues => 'assets/random_values/random_values.json';
+}
+
 class Assets {
   Assets._();
 
   static const $AssetsImagesGen images = $AssetsImagesGen();
+  static const $AssetsRandomValuesGen randomValues = $AssetsRandomValuesGen();
 }
 
 class AssetGenImage extends AssetImage {

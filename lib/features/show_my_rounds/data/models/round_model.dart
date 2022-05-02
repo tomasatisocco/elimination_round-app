@@ -1,4 +1,4 @@
-// ignore_for_file: annotate_overrides, overridden_fields
+// ignore_for_file: annotate_overrides, overridden_fields, must_be_immutable
 
 import 'package:hive/hive.dart';
 
@@ -7,16 +7,17 @@ import '../../domain/entities/round.dart';
 part 'round_model.g.dart';
 
 @HiveType(typeId: 0)
-class RoundModel extends Round {
-  const RoundModel({
-    this.level,
-    this.date,
-    this.userID,
-    this.setResults,
-    this.totalResult,
-    this.shootOff,
-    this.myShots,
-    this.comment,
+class RoundModel extends Round with HiveObjectMixin {
+  RoundModel({
+    @HiveField(0) int? level,
+    @HiveField(1) DateTime? date,
+    @HiveField(2) String? userID,
+    @HiveField(3) Map<String, List<int>>? setResults,
+    @HiveField(4) Map<String, int>? totalResult,
+    @HiveField(5) Map<String, int>? shootOff,
+    @HiveField(6) List<int>? myShots,
+    @HiveField(7) String? comment,
+    @HiveField(8) bool? isFinished,
   }) : super(
           level: level,
           date: date,
@@ -26,24 +27,8 @@ class RoundModel extends Round {
           totalResult: totalResult,
           shootOff: shootOff,
           comment: comment,
+          isFinished: isFinished,
         );
-
-  @HiveField(0)
-  final int? level;
-  @HiveField(1)
-  final DateTime? date;
-  @HiveField(2)
-  final String? userID;
-  @HiveField(3)
-  final Map<String, List<int>>? setResults;
-  @HiveField(4)
-  final Map<String, int>? totalResult;
-  @HiveField(5)
-  final Map<String, int>? shootOff;
-  @HiveField(6)
-  final List<int>? myShots;
-  @HiveField(7)
-  final String? comment;
 
   factory RoundModel.formJson(Map<String, dynamic> json) {
     return RoundModel(
@@ -55,6 +40,7 @@ class RoundModel extends Round {
       totalResult: json["totalResult"],
       shootOff: json["shootOff"],
       comment: json["comment"],
+      isFinished: json["isFinished"],
     );
   }
 
@@ -68,6 +54,7 @@ class RoundModel extends Round {
       "totalResult": totalResult,
       "shootOff": shootOff,
       "comment": comment,
+      "isFinished": isFinished,
     };
   }
 
@@ -81,6 +68,7 @@ class RoundModel extends Round {
       totalResult: newModel.totalResult ?? totalResult,
       shootOff: newModel.shootOff ?? shootOff,
       comment: newModel.comment ?? comment,
+      isFinished: newModel.isFinished,
     );
   }
 
@@ -96,6 +84,7 @@ class RoundModel extends Round {
       totalResult: $totalResult
       shootOff: $shootOff
       comment: $comment
+      isFinished: $isFinished
     ''';
   }
 
@@ -109,5 +98,6 @@ class RoundModel extends Round {
         totalResult,
         shootOff,
         comment,
+        isFinished,
       ];
 }
